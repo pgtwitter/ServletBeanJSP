@@ -57,6 +57,9 @@ web.xml側
       <profiles>
 
 ## propertiesファイルの指定 (pom)
+* `.properties`ファイルはISO-8859-1が前提．日本語等はUnicodeエスケープ形式で記述する([参考](http://www.02.246.ne.jp/~torutk/javahow2/utilproperties.html#doc1_id55))．
+* encodingをどこかに指定すればUTF-8で直接記述できるのかもしれない．
+
 `<filter>main.properties</filter>`
 
     <project>
