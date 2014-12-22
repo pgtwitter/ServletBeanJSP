@@ -13,7 +13,7 @@ web.xml側
         <param-value>mail@address</param-value>
       </context-param>
 
-#### JSPの場合 (JSP)
+### JSPの場合 (JSP)
 
     <%= application.getInitParameter("mailAddress") %>
 
