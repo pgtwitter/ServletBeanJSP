@@ -5,6 +5,9 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+	<error-page>
+		<location>/error.jsp</location>
+	</error-page>
 	<context-param>
 		<param-name>buildNumber</param-name>
 		<param-value>${buildNumber}${buildInfo}</param-value>

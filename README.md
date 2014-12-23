@@ -3,6 +3,17 @@
 ## JSPで改行の抑制 (JSP)
     <%@ page trimDirectiveWhitespaces="true"%>
 
+## エラーコードの取得 (JSP)
+    <%= pageContext.getErrorData().getStatusCode() %>
+
+#### web.xmlによるエラーページの設定
+
+    <webapp>
+    …
+      <error-page>
+        <location>/error.jsp</location>
+      </error-page>
+
 ## web.xmlから初期値の取得
 web.xml側
 
@@ -147,3 +158,22 @@ web.xml側
        </dependency>
     …
 	</dependencies>
+
+## MySQL-timstampからJavascript-Dateへフォーマットを変換 (Servlet)
+[他のサンプルから](https://github.com/pgtwitter/jersey2backbonejs/blob/master/src/main/java/myGroup/jersey2backbonejs/Message.java)
+
+	public void setCreateTime(String createTime) {
+		this.createTime = sqlDate2jsDate(createTime);
+	}
+	static SimpleDateFormat fromFormat = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss.SSS"); // MySQL timestamp
+	static SimpleDateFormat toFormat = new SimpleDateFormat(
+			"yyyy/MM/dd HH:mm:ss"); // Javascript Date Class Argument
+	public static String sqlDate2jsDate(String date) {
+		try {
+			return toFormat.format(fromFormat.parse(date));
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
