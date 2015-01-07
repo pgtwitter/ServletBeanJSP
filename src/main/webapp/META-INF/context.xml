@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+	<Resource
+	name="jdbc/tomcatUsers"
+	auth="Container"
+	type="javax.sql.DataSource"
+	driverClassName="com.mysql.jdbc.Driver"
+	username="${jdbc.tomcatUsers.username}"
+	password="${jdbc.tomcatUsers.password}"
+	url="${jdbc.tomcatUsers.jdbcUrl}"
+	validationQuery="select 1"
+	maxActive="100"
+	maxIdle="30"
+	maxWait="10000"
+	/>
+	<Realm
+	className="org.apache.catalina.realm.DataSourceRealm"
+	localDataSource="true"
+	dataSourceName="jdbc/tomcatUsers"
+	userTable="user"
+	userNameCol="username"
+	userCredCol="password"
+	userRoleTable="userRole"
+	roleNameCol="roles"
+	/>
+</Context>

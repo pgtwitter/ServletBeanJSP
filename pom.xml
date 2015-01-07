@@ -43,6 +43,14 @@
 				<configuration>
 					<webResources>
 						<resource>
+							<directory>src/main/webapp/META-INF</directory>
+							<filtering>true</filtering>
+							<includes>
+								<include>context.xml</include>
+							</includes>
+							<targetPath>META-INF</targetPath>
+						</resource>
+						<resource>
 							<directory>src/main/webapp/WEB-INF</directory>
 							<filtering>true</filtering>
 							<includes>

@@ -177,3 +177,82 @@ web.xml側
 			return null;
 		}
 	}
+
+##DataSourceRealmの例
+DB接続をDataSourceから得るDataSourceRealmを利用してみる
+(MySQLを利用した例)
+
+META-INF/context.xml
+
+    <Context … >
+	…
+	  <Resource
+	    name="jdbc/tomcatUsers"
+	    auth="Container"
+	    type="javax.sql.DataSource"
+	    driverClassName="com.mysql.jdbc.Driver"
+	    username="username_main"
+	    password="password_main"
+	    url="jdbc:mysql://localhost/tomcatUsers_main"
+	    validationQuery="select 1"
+	    maxActive="100"
+	    maxIdle="30"
+	    maxWait="10000"
+	  />
+	  <Realm className="org.apache.catalina.realm.DataSourceRealm"
+	    localDataSource="true"
+	    dataSourceName="jdbc/tomcatUsers"
+	    userTable="user"
+	    userNameCol="username"
+	    userCredCol="password"
+	    userRoleTable="userRole"
+	    roleNameCol="roles"
+	  />
+    …
+    </Context>
+
+- RealmのclassNameが…DataSourceRealmとなる．
+- Reasourceのnameと，RealmのdataSourceNameを合わせる.
+- RealmのlocalDataSourceはMETA-INF/context.xml内でDataSourceを定義している場合はtrueにする(らしい)
+
+##DIGEST認証の設定
+WEB-INF/web.xml
+
+	<web-app … >
+	　…
+	　<security-constraint>
+	　　<web-resource-collection>
+	　　　<url-pattern>/private/*</url-pattern>
+	　　</web-resource-collection>
+	　　<auth-constraint>
+	　　　<role-name>himitsu</role-name>
+	　　</auth-constraint>
+	　</security-constraint>
+
+	　<login-config>
+	　　<auth-method>DIGEST</auth-method>
+	　　<realm-name>Private Area</realm-name>
+	　</login-config>
+
+	　<security-role>
+	　　<role-name>himitsu</role-name>
+	　</security-role>
+	 …
+	</web-app>
+
+- login-config要素 > realm-name要素の値でサーバからブクライアントに認証の要求している領域(Realm)名称が提示される
+  - これはブラウザ等では入力ダイアログに表示されたりする
+- login-config要素 > auth-method要素の値が'BASIC'ならBASIC認証になる．
+      - BASIC認証では同一サーバで領域名が同じなら認証後はブラウザは認証済みのID:PASS(Base64エンコード値)を渡す．サーバはこれを(復元して）用いて認証を行う．
+- DIGEST認証ではダイジェスト値が渡される．
+      - 送られたダイジェスト値と登録されているID/PASSから生成したダイジェスト値を比較して認証しているので，オリジナルのID/PASSは復元できない
+      - DIGEST認証はcontext.xml内のRealm要素のdigest属性とは異なる．こちらはRealm要素のuserCredCol属性で取得された値がdigest値である場合にそのアルゴリズムを示す属性である，
+          - ちなみにDIGEST認証の使用とRealm要素のdigest属性は同時に指定できない．
+
+**ユーザ名の取得
+*JSP
+
+	<%=request.getRemoteUser()%>
+*Servlet
+
+	((HTTPServletRequest)request).getRemoteUser();
