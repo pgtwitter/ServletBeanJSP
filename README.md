@@ -249,10 +249,10 @@ WEB-INF/web.xml
       - DIGEST認証はcontext.xml内のRealm要素のdigest属性とは異なる．こちらはRealm要素のuserCredCol属性で取得された値がdigest値である場合にそのアルゴリズムを示す属性である，
           - ちなみにDIGEST認証の使用とRealm要素のdigest属性は同時に指定できない．
 
-**ユーザ名の取得
-*JSP
+## ユーザ名の取得
+### JSP
 
 	<%=request.getRemoteUser()%>
-*Servlet
+### Servlet
 
 	((HTTPServletRequest)request).getRemoteUser();
